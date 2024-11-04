@@ -1,0 +1,84 @@
+﻿@model IEnumerable<FormViewModel>
+@{
+    ViewData["Title"] = "Form Yönetimi";
+}
+
+<h1>Form Yönetimi</h1>
+
+<form method="get" asp-action="Index" class="mb-3">
+    <input type="text" name="searchString" placeholder="Form ismiyle ara" class="form-control w-25 d-inline" />
+    <button type="submit" class="btn btn-secondary">Ara</button>
+</form>
+
+<button id="createFormBtn" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#createFormModal">Yeni Form Oluştur</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Form Adı</th>
+            <th>Açıklama</th>
+            <th>Oluşturma Tarihi</th>
+            <th>Oluşturan Kullanıcı ID</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var form in Model)
+        {
+            <tr>
+                <td>@form.Name</td>
+                <td>@form.Description</td>
+                <td>@form.CreatedAt.ToShortDateString()</td>
+                <td>@form.CreatedById</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@form.Id" class="btn btn-info btn-sm">Görüntüle</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="createFormModal" tabindex="-1" aria-labelledby="createFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createFormModalLabel">Yeni Form Oluştur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createForm" asp-action="Create" method="post">
+                    <div class="mb-3">
+                        <label for="Name" class="form-label">Form Adı</label>
+                        <input type="text" class="form-control" name="Name" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Description" class="form-label">Açıklama</label>
+                        <textarea class="form-control" name="Description"></textarea>
+                    </div>
+                    <div id="fieldsContainer">
+                        <h5>Alanlar</h5>
+                        <button type="button" class="btn btn-secondary mb-2" onclick="addField()">Alan Ekle</button>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addField() {
+        const fieldCount = $("#fieldsContainer .field-group").length;
+        const fieldHtml = `
+                <div class="field-group mb-3">
+                    <input type="checkbox" name="Fields[${fieldCount}].Required" /> Zorunlu
+                    <input type="text" name="Fields[${fieldCount}].Name" placeholder="Alan Adı" class="form-control mb-2" required />
+                    <select name="Fields[${fieldCount}].DataType" class="form-select mb-2" required>
+                        <option value="STRING">Metin</option>
+                        <option value="NUMBER">Sayı</option>
+                    </select>
+                    <button type="button" class="btn btn-danger" onclick="$(this).closest('.field-group').remove()">Sil</button>
+                </div>`;
+        $("#fieldsContainer").append(fieldHtml);
+    }
+</script>
