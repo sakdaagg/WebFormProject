@@ -9,6 +9,7 @@ namespace WebFromProject.Entities.Entities
         public string FirstName { get; set; }
         [MaxLength(100)]
         public string LastName { get; set; }
+        public ICollection<Form> Forms { get; } 
     }
     public class AspNetRole : IdentityRole<Guid>
     {
