@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebFormProject.DAL.DbContexts;
 
@@ -11,9 +12,11 @@ using WebFormProject.DAL.DbContexts;
 namespace WebFormProject.DAL.Migrations
 {
     [DbContext(typeof(WebFormDbContext))]
-    partial class WebFormDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241104181456_Form table ve Field modelleri arasinda iliski konuldu")]
+    partial class FormtableveFieldmodelleriarasindailiskikonuldu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebFormProject.DAL.DbContexts;
 
@@ -11,9 +12,11 @@ using WebFormProject.DAL.DbContexts;
 namespace WebFormProject.DAL.Migrations
 {
     [DbContext(typeof(WebFormDbContext))]
-    partial class WebFormDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241104131533_Form table add")]
+    partial class Formtableadd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,35 +236,6 @@ namespace WebFormProject.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WebFromProject.Entities.Entities.Field", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("DataType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("FormId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Required")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FormId");
-
-                    b.ToTable("Field");
-                });
-
             modelBuilder.Entity("WebFromProject.Entities.Entities.Form", b =>
                 {
                     b.Property<int>("Id")
@@ -342,17 +316,6 @@ namespace WebFormProject.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebFromProject.Entities.Entities.Field", b =>
-                {
-                    b.HasOne("WebFromProject.Entities.Entities.Form", "Form")
-                        .WithMany("Fields")
-                        .HasForeignKey("FormId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Form");
-                });
-
             modelBuilder.Entity("WebFromProject.Entities.Entities.Form", b =>
                 {
                     b.HasOne("WebFromProject.Entities.Entities.AspNetUser", "CreatedBy")
@@ -367,11 +330,6 @@ namespace WebFormProject.DAL.Migrations
             modelBuilder.Entity("WebFromProject.Entities.Entities.AspNetUser", b =>
                 {
                     b.Navigation("Forms");
-                });
-
-            modelBuilder.Entity("WebFromProject.Entities.Entities.Form", b =>
-                {
-                    b.Navigation("Fields");
                 });
 #pragma warning restore 612, 618
         }
