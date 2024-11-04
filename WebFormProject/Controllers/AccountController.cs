@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WebFormProject.Models;
 using WebFormProject.Services.Abstract;
 using WebFromProject.Entities.Entities;
@@ -28,15 +32,31 @@ public class AccountController : Controller
             var user = await _userService.AuthenticateAsync(model.Username, model.Password);
             if (user != null)
             {
-                // Başarılı giriş
-                return RedirectToAction("Index", "Home");
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
+                    new Claim(ClaimTypes.Name, user.UserName), 
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties
+                {
+                    RedirectUri = Url.Action("Index", "Form"),
+                };
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+                return RedirectToAction("Index", "Form"); 
             }
             else
             {
                 ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
             }
         }
+
         return View(model);
+
     }
 
     [HttpGet]
